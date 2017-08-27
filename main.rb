@@ -8,6 +8,7 @@ require "sanitize"
 contents_path = ARGV[0]
 
 Dir.glob("#{contents_path}**/*.md") do |entry_list|
+  uri = entry_list.slice(contents_path.length-1..-4)
   File.open(entry_list, "r") do |entry| 
     # Split data to meta info and body
     entry_raw_data = entry.read.split("+++\n")
@@ -27,9 +28,10 @@ Dir.glob("#{contents_path}**/*.md") do |entry_list|
     body_html = CommonMarker.render_html(entry_raw_data[2])
     body = Sanitize.fragment(body_html)
     tmp["body"] =  body
+    tmp["uri"] = "/entry#{uri}"
 
     # output 
-    puts "{ \"index\" : {} }"
+    puts "{ \"index\" : { \"_index\" : \"blog\", \"_type\" : \"entry\", \"_id\" : \"#{uri}\" } }"
     puts tmp.to_json
   end
 end
