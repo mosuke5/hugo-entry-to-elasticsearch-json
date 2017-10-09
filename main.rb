@@ -23,6 +23,7 @@ Dir.glob("#{contents_path}**/*.md") do |entry_list|
     entry_data.each do |k, v|
       tmp[k.downcase] = v
     end
+
     
     # sanitize html tags
     body_html = CommonMarker.render_html(entry_raw_data[2])
@@ -31,7 +32,9 @@ Dir.glob("#{contents_path}**/*.md") do |entry_list|
     tmp["uri"] = "/entry#{uri}"
 
     # output 
-    puts "{ \"index\" : { \"_index\" : \"blog\", \"_type\" : \"entry\", \"_id\" : \"#{uri}\" } }"
-    puts tmp.to_json
+    if entry_data["draft"] == false
+      puts "{ \"index\" : { \"_index\" : \"blog\", \"_type\" : \"entry\", \"_id\" : \"#{uri}\" } }"
+      puts tmp.to_json
+    end
   end
 end
