@@ -29,6 +29,7 @@ Dir.glob("#{contents_path}**/*.md") do |entry_list|
     body_html = CommonMarker.render_html(entry_raw_data[2])
     body = Sanitize.fragment(body_html)
     tmp["body"] =  body
+    tmp["body_length"] = body.length
     tmp["uri"] = "/entry#{uri}"
 
     # output 
